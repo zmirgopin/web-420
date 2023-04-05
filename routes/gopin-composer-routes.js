@@ -1,8 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const Composer = require('../models/gopin-composer');
+const Composer = require('../models/gopin-composer.js');
+const PORT = process.env.PORT || 3000;
 
-router.get('/api/composers', async(req, res)=> {
+/**
+ * findAllComposers
+ * @openapi
+ * /api/composers:
+ *   get:
+ *     tags:
+ *       - Composer
+ *     description: API for returning an array of composer objects.
+ *     summary: returns an array of composers in JSON format.
+ *     responses:
+ *       '200':
+ *         description: array of composers.
+ *       '500':
+ *         description: Server Exception.
+ *       '501':
+ *         description: MongoDB Exception.
+ */
+router.get('/gopin-composer', async(req, res)=> {
     try {
         Composer.find({}, function(err, composers) {
             if (err) {
@@ -25,7 +43,32 @@ router.get('/api/composers', async(req, res)=> {
     }
 })
 
-router.get('/api/composers/:id', async(req, res) => {
+/**
+ * findComposerById
+ * @openapi
+ * /api/composers/{id}:
+ *   get:
+ *     tags:
+ *       - Composers
+ *     description:  API for returning a composer document
+ *     summary: returns a composer document
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Composer document id
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Composer document
+ *       '500':
+ *         description: Server exception
+ *       '501':
+ *         description: MongoDB Exception
+ */
+
+router.get('/gopin-composer', async(req, res) => {
     try {
         Composer.findOne({'_id': req.params.id}, function(err, composer) {
             if (err) {
@@ -47,7 +90,35 @@ router.get('/api/composers/:id', async(req, res) => {
     }
 })
 
-router.post('/api/composers', async(req, res) => {
+/**
+ * createComposer
+ * @openapi
+ * /api/composers:
+ *   post:
+ *     tags:
+ *       - Composers
+ *     name: createComposer
+ *     description: API for adding a new composer document to MongoDB Atlas
+ *     summary: Creates a new composer document
+ *     requestBody:
+ *       description: Composer information
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - type
+ *             properties:
+ *               type:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Composer added
+ *       '500':
+ *         description: Server Exception
+ *       '501':
+ *         description: MongoDB Exception
+ */
+router.post('/gopin-composer', async(req, res) => {
     try {
         const composer= {
             firstName: req.body.firstName,
@@ -72,4 +143,7 @@ router.post('/api/composers', async(req, res) => {
             'message': `Server Exception: ${e.message}`
         })
     }
+})
+app.listen(PORT, () => {
+    console.log('Application started and listening on PORT' + PORT);
 })
