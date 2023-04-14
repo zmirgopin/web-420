@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Composer = require('../models/gopin-composer.js');
+const Composer = require('../models/composer.js');
 const PORT = process.env.PORT || 3000;
 
 /**
@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 3000;
  *       '501':
  *         description: MongoDB Exception.
  */
-router.get('/gopin-composer', async(req, res)=> {
+router.get('/api/composers', async(req, res)=> {
     try {
         Composer.find({}, function(err, composers) {
             if (err) {
@@ -68,7 +68,7 @@ router.get('/gopin-composer', async(req, res)=> {
  *         description: MongoDB Exception
  */
 
-router.get('/gopin-composer', async(req, res) => {
+router.get('/api/composers/:id', async(req, res) => {
     try {
         Composer.findOne({'_id': req.params.id}, function(err, composer) {
             if (err) {
@@ -118,7 +118,7 @@ router.get('/gopin-composer', async(req, res) => {
  *       '501':
  *         description: MongoDB Exception
  */
-router.post('/gopin-composer', async(req, res) => {
+router.post('/api/composers', async(req, res) => {
     try {
         const composer= {
             firstName: req.body.firstName,
