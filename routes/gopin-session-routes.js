@@ -1,3 +1,9 @@
+/**
+	Title: gopin-session-routes.js
+  Author: Zahava Gopin
+  Date: 19 April 2023
+  Description: API for session routes.
+ */
 const express = require("express");
 const router = express.Router();
 const User = require("../models/gopin-user.js");
